@@ -3,7 +3,7 @@
 use std::sync::Arc;
 use std::time::Instant;
 
-use blstrs::Bls12;
+use halo2curves::bn256::{Fq, Fr, G1Affine, G2Affine, Bn256};
 use ec_gpu::GpuName;
 use ec_gpu_gen::multiexp_cpu::{multiexp_cpu, FullDensity, QueryDensity, SourceBuilder};
 use ec_gpu_gen::{
@@ -43,14 +43,14 @@ fn gpu_multiexp_consistency() {
         .map(|device| crate::program!(device))
         .collect::<Result<_, _>>()
         .expect("Cannot create programs!");
-    let mut kern = MultiexpKernel::<<Bls12 as Engine>::G1Affine>::create(programs, &devices)
+    let mut kern = MultiexpKernel::<<Bn256 as Engine>::G1Affine>::create(programs, &devices)
         .expect("Cannot initialize kernel!");
     let pool = Worker::new();
 
     let mut rng = rand::thread_rng();
 
     let mut bases = (0..(1 << START_LOG_D))
-        .map(|_| <Bls12 as Engine>::G1::random(&mut rng).to_affine())
+        .map(|_| <Bn256 as Engine>::G1::random(&mut rng).to_affine())
         .collect::<Vec<_>>();
 
     for log_d in START_LOG_D..=MAX_LOG_D {
@@ -61,7 +61,7 @@ fn gpu_multiexp_consistency() {
 
         let v = Arc::new(
             (0..samples)
-                .map(|_| <Bls12 as Engine>::Fr::random(&mut rng).to_repr())
+                .map(|_| <Bn256 as Engine>::Fr::random(&mut rng).to_repr())
                 .collect::<Vec<_>>(),
         );
 

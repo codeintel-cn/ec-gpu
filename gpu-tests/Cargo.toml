@@ -26,6 +26,7 @@ rayon = "1.5.3"
 [build-dependencies]
 blstrs = { version = "0.6.0", features = ["__private_bench"] }
 ec-gpu-gen = { path = "../ec-gpu-gen" }
+halo2curves = { path = "../../halo2curves" }
 
 [features]
 default = ["cuda", "opencl"]

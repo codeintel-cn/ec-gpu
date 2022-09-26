@@ -2,7 +2,7 @@
 
 use std::time::Instant;
 
-use blstrs::Scalar as Fr;
+// use blstrs::Scalar as Fr;
 use ec_gpu_gen::{
     fft::FftKernel,
     fft_cpu::{parallel_fft, serial_fft},
@@ -10,6 +10,8 @@ use ec_gpu_gen::{
     threadpool::Worker,
 };
 use ff::{Field, PrimeField};
+
+use halo2curves::bn256::{Fq, Fr, G1Affine, G2Affine, Bn256};
 
 fn omega<F: PrimeField>(num_coeffs: usize) -> F {
     // Compute omega, the 2^exp primitive root of unity
